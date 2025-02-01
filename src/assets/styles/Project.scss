@@ -2,17 +2,17 @@
     display: flex;
     flex-direction: column;
     padding: 5% 10%;
-    text-align: left;
+    text-align: center;
 }
   
 .projects-container .projects-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    grid-gap: 50px;
+    grid-gap: 100px;
 }
   
 .projects-container .projects-grid .project {
-    text-align: left;
+    text-align: center;
 }
   
 .project h2:hover {

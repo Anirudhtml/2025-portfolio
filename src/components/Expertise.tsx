@@ -1,11 +1,13 @@
 import React from "react";
 import '@fortawesome/free-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faReact, faDocker, faPython } from '@fortawesome/free-brands-svg-icons';
+import { faReact ,faAws, faPython } from '@fortawesome/free-brands-svg-icons';
 import Chip from '@mui/material/Chip';
 import '../assets/styles/Expertise.scss';
+import icon from '../assets/images/icon.jpeg';
 
 const labelsFirst = [
+    "Next.js",
     "React",
     "TypeScript",
     "JavaScript",
@@ -14,7 +16,7 @@ const labelsFirst = [
     "SASS",
     "Flask",
     "Python",
-    "SQL",
+    "MongoDB",
     "PostgreSQL",
     "Postman"
 ];
@@ -24,9 +26,7 @@ const labelsSecond = [
     "GitHub Actions",
     "Docker",
     "AWS",
-    "Azure",
     "Linux",
-    "Snowflake",
     "Pandas",
     "Selenium",
 ];
@@ -35,22 +35,18 @@ const labelsThird = [
     "OpenAI",
     "Groq",
     "LangChain",
-    "Qdrant",
-    "Hugging Face",
-    "LlamaIndex",
-    "Streamlit",
 ];
 
 function Expertise() {
     return (
     <div className="container" id="expertise">
         <div className="skills-container">
-            <h1>Expertise</h1>
+            <p className="title">Expertise</p>
             <div className="skills-grid">
                 <div className="skill">
                     <FontAwesomeIcon icon={faReact} size="3x"/>
-                    <h3>Full Stack Web Development</h3>
-                    <p>I have built a diverse array of web applications from scratch using modern technologies such as React and Flask. I have a strong proficiency in the SDLC process and frontend + backend development.</p>
+                    <h3>MERN STACK</h3>
+                    <p>I have built a diverse array of web applications from scratch using modern technologies such as React, Node.js, Express, and MongoDB. I have a strong proficiency in the SDLC process and full-stack development, with expertise in both frontend and backend technologies.</p>
                     <div className="flex-chips">
                         <span className="chip-title">Tech stack:</span>
                         {labelsFirst.map((label, index) => (
@@ -60,9 +56,9 @@ function Expertise() {
                 </div>
 
                 <div className="skill">
-                    <FontAwesomeIcon icon={faDocker} size="3x"/>
+                    <FontAwesomeIcon icon={faAws} size="3x"/>
                     <h3>DevOps & Automation</h3>
-                    <p>Once the application is built, I help clients set up DevOps testing, CI/CD pipelines, and deployment automation to support the successful Go-Live.</p>
+                    <p>Once the application is built, I help clients set up cloud infrastructure, CI/CD pipelines, and deployment automation using AWS and other cloud technologies to ensure a smooth and scalable Go-Live.</p>
                     <div className="flex-chips">
                         <span className="chip-title">Tech stack:</span>
                         {labelsSecond.map((label, index) => (

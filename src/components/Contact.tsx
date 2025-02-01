@@ -1,112 +1,169 @@
-import React, { useRef, useState } from 'react';
-import '../assets/styles/Contact.scss';
-// import emailjs from '@emailjs/browser';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import SendIcon from '@mui/icons-material/Send';
-import TextField from '@mui/material/TextField';
+import React, { useState } from "react";
+import "../assets/styles/Contact.scss";
+import emailjs from "emailjs-com";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import SendIcon from "@mui/icons-material/Send";
+import TextField from "@mui/material/TextField";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import Toast from "./Toast";
+
+const theme = createTheme({
+  components: {
+    MuiTextField: {
+      styleOverrides: {
+        root: {
+          "& .MuiOutlinedInput-root": {
+            backgroundColor: "#ffffff",
+            "& fieldset": {
+              borderColor: "#5100cacf",
+            },
+            "&:hover fieldset": {
+              borderColor: "#5000ca",
+            },
+            "&.Mui-focused fieldset": {
+              borderColor: "#5000ca",
+            },
+          },
+          "& .MuiOutlinedInput-input": {
+            color: "#000000",
+          },
+          "& .MuiInputLabel-root": {
+            color: "#000000",
+            "&.Mui-focused": {
+              color: "#5000ca",
+            },
+          },
+          "& .MuiFormHelperText-root": {
+            color: "#ff0000",
+          },
+        },
+      },
+    },
+  },
+});
 
 function Contact() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
 
-  const [name, setName] = useState<string>('');
-  const [email, setEmail] = useState<string>('');
-  const [message, setMessage] = useState<string>('');
+  const [nameError, setNameError] = useState(false);
+  const [emailError, setEmailError] = useState(false);
+  const [messageError, setMessageError] = useState(false);
+  const [isSent, setIsSent] = useState(false);
 
-  const [nameError, setNameError] = useState<boolean>(false);
-  const [emailError, setEmailError] = useState<boolean>(false);
-  const [messageError, setMessageError] = useState<boolean>(false);
+  const sendEmail = (e: React.FormEvent<HTMLFormElement>) => {
+    setIsSent(true);
+    setTimeout(() => {
+      setIsSent(false);
+    }, 3000);
 
-  const form = useRef();
-
-  const sendEmail = (e: any) => {
     e.preventDefault();
 
-    setNameError(name === '');
-    setEmailError(email === '');
-    setMessageError(message === '');
+    setNameError(name.trim() === "");
+    setEmailError(email.trim() === "");
+    setMessageError(message.trim() === "");
 
-    /* Uncomment below if you want to enable the emailJS */
+    if (name.trim() && email.trim() && message.trim()) {
+      const templateParams = {
+        from_name: name,
+        contact: email,
+        message,
+        to_email: "anirudhgupta905@gmail.com",
+      };
 
-    // if (name !== '' && email !== '' && message !== '') {
-    //   var templateParams = {
-    //     name: name,
-    //     email: email,
-    //     message: message
-    //   };
-
-    //   console.log(templateParams);
-    //   emailjs.send('service_id', 'template_id', templateParams, 'api_key').then(
-    //     (response) => {
-    //       console.log('SUCCESS!', response.status, response.text);
-    //     },
-    //     (error) => {
-    //       console.log('FAILED...', error);
-    //     },
-    //   );
-    //   setName('');
-    //   setEmail('');
-    //   setMessage('');
-    // }
+      emailjs
+        .send(
+          process.env.REACT_APP_SERVICE_KEY as string,
+          process.env.REACT_APP_TEMPLATE_ID as string,
+          templateParams,
+          process.env.REACT_APP_MAIL_API as string,
+        )
+        .then((response) => {
+          console.log("SUCCESS!", response.status, response.text);
+          setName("");
+          setEmail("");
+          setMessage("");
+        })
+        .catch((error) => {
+          console.log("FAILED...", error);
+        });
+    }
   };
 
   return (
     <div id="contact">
       <div className="items-container">
+        {isSent && <Toast content="we'll be in touch ;)" />}
         <div className="contact_wrapper">
-          <h1>Contact Me</h1>
-          <p>Got a project waiting to be realized? Let's collaborate and make it happen!</p>
-          <Box
-            ref={form}
-            component="form"
-            noValidate
-            autoComplete="off"
-            className='contact-form'
-          >
-            <div className='form-flex'>
+            <h2 className="title">Contact Me</h2>
+            <p className="subtitle">
+              Let's get in touch! Fill out the form below and I'll get back to
+              you as soon as possible.
+            </p>
+          <ThemeProvider theme={theme}>
+            <Box
+              component="form"
+              noValidate
+              autoComplete="off"
+              className="contact-form"
+              onSubmit={sendEmail}
+            >
+              <div className="form-flex">
+                <TextField
+                  required
+                  label="Your Name"
+                  placeholder="What's your name?"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  error={nameError}
+                  helperText={nameError ? "Please enter your name" : ""}
+                  fullWidth
+                />
+                <TextField
+                  required
+                  label="Email / Phone"
+                  placeholder="How can I reach you?"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  error={emailError}
+                  helperText={
+                    emailError ? "Please enter your email or phone number" : ""
+                  }
+                  fullWidth
+                />
+              </div>
               <TextField
                 required
-                id="outlined-required"
-                label="Your Name"
-                placeholder="What's your name?"
-                value={name}
-                onChange={(e) => {
-                  setName(e.target.value);
-                }}
-                error={nameError}
-                helperText={nameError ? "Please enter your name" : ""}
+                label="Message"
+                placeholder="Send me any inquiries or questions"
+                multiline
+                rows={10}
+                className="body-form"
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                error={messageError}
+                helperText={messageError ? "Please enter the message" : ""}
+                fullWidth
               />
-              <TextField
-                required
-                id="outlined-required"
-                label="Email / Phone"
-                placeholder="How can I reach you?"
-                value={email}
-                onChange={(e) => {
-                  setEmail(e.target.value);
+              <Button
+                type="submit"
+                variant="contained"
+                endIcon={<SendIcon />}
+                sx={{
+                  backgroundColor: "#ffffff",
+                  color: "#050f0b",
+                  "&:hover": {
+                    backgroundColor: "#5000ca",
+                    color: "#ffffff",
+                  },
                 }}
-                error={emailError}
-                helperText={emailError ? "Please enter your email or phone number" : ""}
-              />
-            </div>
-            <TextField
-              required
-              id="outlined-multiline-static"
-              label="Message"
-              placeholder="Send me any inquiries or questions"
-              multiline
-              rows={10}
-              className="body-form"
-              value={message}
-              onChange={(e) => {
-                setMessage(e.target.value);
-              }}
-              error={messageError}
-              helperText={messageError ? "Please enter the message" : ""}
-            />
-            <Button variant="contained" endIcon={<SendIcon />} onClick={sendEmail}>
-              Send
-            </Button>
-          </Box>
+              >
+                Send
+              </Button>
+            </Box>
+          </ThemeProvider>
         </div>
       </div>
     </div>
