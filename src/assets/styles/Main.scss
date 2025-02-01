@@ -121,10 +121,19 @@
 
     .dark-mode .about-section {
         background-color: rgb(0, 0, 0);
-    
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        
     }
+
     .light-mode .about-section {
         background-color: rgb(255, 255, 255);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
 
     }
     .about-section h1 {
@@ -178,8 +187,8 @@
     .about-section .image-wrapper {
         display: flex;
         justify-content: center;
-        align-items: center;
-        padding-left: 5%;
+        align-items: start;
+        // padding-left: 5%;
         width: 90%;
 
         img {
